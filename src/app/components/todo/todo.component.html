@@ -1,0 +1,32 @@
+<form [formGroup]="todoForm" (ngSubmit)="processForm()">
+    <div class="form-group">
+        <label for="desc">Description <span class="text-danger">*</span></label>
+        <input type="text" name="desc" id="desc" class="form-control" formControlName="desc" required>
+        <p *ngIf="desc.invalid && (desc.dirty || desc.touched)" class="text-danger">
+            Please enter a description.
+        </p>
+    </div>
+    <div class="form-group">
+        <p>Priority <span class="text-danger">*</span></p>
+        <div class="form-check form-check-inline">
+            <input type="radio" name="priority" id="high" value="High" class="form-check-input" formControlName="priority" required>
+            <label for="high" class="form-check-label">High</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input type="radio" name="priority" id="medium" value="Medium" class="form-check-input" formControlName="priority">
+            <label for="medium" class="form-check-label">Medium</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input type="radio" name="priority" id="low" value="Low" class="form-check-input" formControlName="priority">
+            <label for="low" class="form-check-label">Low</label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="due">Due <span class="text-danger">*</span></label>
+        <input type="date" name="due" id="due" class="form-control" formControlName="due" required>
+        <p *ngIf="due.hasError('dateValidator') || due.hasError('required') && (due.dirty || due.touched)" class="text-danger">
+            Please select a valid due date.
+        </p>
+    </div>
+    <button type="submit" [disabled]="todoForm.invalid" class="btn btn-primary float-right">Add</button>
+</form>
