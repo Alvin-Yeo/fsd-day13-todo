@@ -1,11 +1,59 @@
-<div class="task-container">
+<!-- <div class="task-container">
     <div *ngFor="let task of tasks" class="task-item card mb-3">
         <div class="card-body">
             <p class="font-weight-bold">{{ task.desc }}</p>
             <div class="d-flex justify-content-between">
-            <p class="font-italic">{{ task.priority }}</p>
-            <p class="font-italic">{{ task.due.toDateString() }}</p>
+                <p class="font-italic">{{ task.priority }}</p>
+                <p class="font-italic">{{ task.due.toDateString() }}</p>
             </div>
         </div>
     </div>
+</div> -->
+
+<div class="task-container">
+    <form [formGroup]="taskForm">
+        <div formArrayName="tasks">
+            <div *ngFor="let task of taskArray.controls; let i = index" [formGroup]="task" class="task-item card mb-3">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <input *ngIf="task.controls.readOnly.value" type="text" readonly class="form-control-plaintext font-weight-bold" id="desc" value="{{ task.controls.desc.value }}">
+                        <span *ngIf="task.controls.isCompleted.value" class="text-success text-right font-weight-bold">Completed!</span>
+                        <input *ngIf="!task.controls.readOnly.value" type="text" class="form-control" id="desc" [value]="task.controls.desc.value" formControlName="desc">
+                        <input type="hidden" name="oldDesvValue" value="{{ task.controls.desc.value }}">
+                    </div>
+                    <p *ngIf="task.controls.desc.invalid && (task.controls.desc.dirty || task.controls.desc.touched)" class="text-danger">
+                        Please enter a description.
+                    </p>
+                    <div class="d-flex justify-content-between mt-2">
+                        <div>
+                            <select class="custom-select" [disabled] formControlName="priority">
+                                <option [selected]="task.controls.priority.value === 'Low'">Low</option>
+                                <option [selected]="task.controls.priority.value === 'Medium'">Medium</option>
+                                <option [selected]="task.controls.priority.value === 'High'">High</option>
+                            </select>
+                        </div>
+                        <div>
+                            <input type="date" name="due" id="due" class="form-control" value="{{ task.controls.due.value }}" [disabled] formControlName="due">
+                        </div>
+                    </div>
+                    <p *ngIf="task.controls.due.hasError('dateValidator') || task.controls.due.hasError('required') && (task.controls.due.dirty || task.controls.due.touched)" class="text-danger text-right">
+                        Please select a valid due date.
+                    </p>
+                    <div class="d-flex justify-content-between mt-3">
+                        <button class="btn btn-success" (click)="onComplete(i)"
+                            [disabled]="task.controls.isCompleted.value || !task.controls.readOnly.value">Done</button>
+
+                        <button class="btn btn-warning" (click)="onEdit(i, task)"  *ngIf="task.controls.readOnly.value" 
+                            [disabled]="task.controls.isCompleted.value">Edit</button>
+
+                        <button class="btn btn-warning" (click)="onUpdate(i, task)" *ngIf="!task.controls.readOnly.value"
+                            [disabled]="task.invalid">Update</button>
+
+                        <button class="btn btn-danger" (click)="onDelete(i)"
+                            [disabled]="!task.controls.readOnly.value">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>

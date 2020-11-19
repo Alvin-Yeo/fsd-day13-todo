@@ -1,0 +1,11 @@
+.custom-select:disabled,
+.form-control:disabled {
+    background-color: #fff;
+    color: #000;
+    opacity: 0.7;
+}
+
+.form-control-plaintext {
+    display: inline-block;
+    width: auto;
+}
