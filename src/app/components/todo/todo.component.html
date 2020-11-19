@@ -1,4 +1,4 @@
-<form [formGroup]="todoForm" (ngSubmit)="processForm()">
+<form [formGroup]="todoForm" (ngSubmit)="processForm(); todoForm.reset()">
     <div class="form-group">
         <label for="desc">Description <span class="text-danger">*</span></label>
         <input type="text" name="desc" id="desc" class="form-control" formControlName="desc" required>
